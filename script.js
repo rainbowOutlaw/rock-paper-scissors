@@ -8,7 +8,7 @@ function getComputerChoice(){
 
 function playRound(playerSelection, computerSelection){
     if(playerSelection === computerSelection){
-        //TODO
+        return 'replay';
     }
 
     switch (computerSelection){
@@ -36,5 +36,12 @@ function playRound(playerSelection, computerSelection){
 }
 
 function game(){
-
+    let result = playRound(prompt('Select rock paper or scissors').toLowerCase(), getComputerChoice());
+    while(result === 'replay'){
+        result = playRound(prompt('Select rock paper or scissors').toLowerCase(), getComputerChoice());
+    }
+    console.log(result);
 }
+
+
+game();
