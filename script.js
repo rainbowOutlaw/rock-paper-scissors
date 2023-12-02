@@ -1,5 +1,13 @@
 
 const CHOICES = ['rock', 'paper', 'scissors'];
+let score = 0;
+let rounds = 0;
+const currScore = document.querySelector('.curr-score');
+const msg = document.querySelector('.message');
+const finalResult = document.querySelector('.final-result');
+currScore.textContent = score;
+
+const buttons = document.querySelectorAll('button');
 
 function getComputerChoice(){
     const rand = Math.floor((Math.random() * 3));
@@ -35,32 +43,37 @@ function playRound(playerSelection, computerSelection){
 
 }
 
-function getResult(){
-    let result = playRound(prompt('Select rock paper or scissors').toLowerCase(), getComputerChoice());
-    while(!result){
-        result = playRound(prompt('Select rock paper or scissors').toLowerCase(), getComputerChoice());
-    }
-    console.log(result);
-    return result;
-}
+function onChoosing(e){
+    const display_result = playRound(e.target.classList.value, getComputerChoice());
+    if(!display_result){
+        msg.textContent = '';
+        return
+    };
 
-function game(){
-    let count = 0;
-    let w = 0, l=0;
-    while(count < 5){
-        let result = getResult();
-        if(result.includes('won')){
-            w++;
+    if(display_result.includes('won')){
+        score += 1;
+        rounds += 1;
+        msg.textContent = display_result;
+    }else if(display_result.includes('lost')){
+        rounds += 1;
+        msg.textContent = display_result;
+    }
+    currScore.textContent = score;
+    if(rounds == 5){
+        buttons.forEach((button) => {
+            button.removeEventListener('click', onChoosing)
+        })
+        if(score >= 3){
+            finalResult.textContent = 'Congrats!!! You Won The Game';
         }else{
-            l++;
+            finalResult.textContent = 'Sorry!!! You lost';
         }
-        count++;
-    }
-    if(w > l){
-        console.log('Congrats you won the game.');
-    }else{
-        console.log('You lost the game. Better luck next time');
     }
 }
 
-game();
+
+
+
+buttons.forEach((button) => {
+    button.addEventListener('click', onChoosing)
+})
